@@ -612,6 +612,19 @@ func TestMediaPlaylist_ExtendCapacity(t *testing.T) {
 	}
 }
 
+func TestMediaPlaylist_AppendWithAutoExtend(t *testing.T) {
+	m, _ := NewMediaPlaylist(0, 2)
+	m.Append("1.ts", 3.1, "")
+	m.Append("2.ts", 3.1, "")
+	err := m.AppendWithAutoExtend("3.ts", 3.1, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if m.Count() != 3 {
+		t.Errorf("Expected count:%v, got:%v", 3, m.Count())
+	}
+}
+
 // Create new master playlist without params
 // Add media playlist
 func TestNewMasterPlaylist(t *testing.T) {

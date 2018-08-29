@@ -311,6 +311,25 @@ func (p *MediaPlaylist) AppendSegment(seg *MediaSegment) error {
 	return nil
 }
 
+// AppendSegmentWithAutoExtend appends a MediaSegment and auto extend the capacity.
+func (p *MediaPlaylist) AppendSegmentWithAutoExtend(seg *MediaSegment) error {
+	if p.count > p.capacity*2/3 {
+		if err := p.ExtendCapacity(); err != nil {
+			return err
+		}
+	}
+	return p.AppendSegment(seg)
+}
+
+// AppendWithAutoExtend extends the capacity before append.
+func (p *MediaPlaylist) AppendWithAutoExtend(uri string, duration float64, title string) error {
+	seg := new(MediaSegment)
+	seg.URI = uri
+	seg.Duration = duration
+	seg.Title = title
+	return p.AppendSegmentWithAutoExtend(seg)
+}
+
 // Combines two operations: firstly it removes one chunk from the head of chunk slice and move pointer to
 // next chunk. Secondly it appends one chunk to the tail of chunk slice. Useful for sliding playlists.
 // This operation does reset cache.
