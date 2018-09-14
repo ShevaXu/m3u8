@@ -493,7 +493,10 @@ func TestMediaPlaylistWinsize(t *testing.T) {
 		t.Fatalf("Create media playlist failed: %s", e)
 	}
 	for i := 1; i < 10; i++ {
-		p.Slide(fmt.Sprintf("test%d.ts", i), 5.6, "")
+		p.SlideSegment(&MediaSegment{
+			URI:      fmt.Sprintf("test%d.ts", i),
+			Duration: 5.6,
+		})
 		//fmt.Println(p.Encode().String()) // TODO check playlist sizes and mediasequence values
 	}
 }
